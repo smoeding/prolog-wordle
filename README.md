@@ -1,6 +1,6 @@
 # Play Wordle using GNU Prolog
 
-This is an implementation of the [Wordle](https://en.m.wikipedia.org/wiki/Wordle) game written in GNU Prolog.  The program tries to guess German words and expects updates to the knowledge base about the answers. So it can help you to play a Wordle game (try https://wordle.at for German words).
+This is an implementation of the [Wordle](https://en.m.wikipedia.org/wiki/Wordle) game written in [GNU Prolog](http://www.gprolog.org).  The program tries to guess German words and expects updates to the knowledge base about the answers. So it can help you to play a Wordle game (try https://wordle.at for German words).
 
 ## How to play
 
@@ -25,9 +25,9 @@ You can query the possible solutions by calling the `words` goal:
     zyste
     4411 candidates
 
-There are more than 4000 possible solutions When the game starts and no additional facts are added to the knowledge base.
+There are more than 4000 possible solutions when the game starts and no additional facts are added to the knowledge base.
 
-Let's start and try the word *insel*. Maybe this guess tells us the letters `i`, `e` and `l` are yellow and the letters `n` and `s` are gray. So we enter this data into the knowledge base:
+Let's start and try the word *insel*. Maybe this guess tells us the letters *i*, *e* and *l* are yellow and the letters *n* and *s* are gray. So we enter this data into the knowledge base:
 
     | ?- yellow(i, 1).
     | ?- yellow(e, 4).
@@ -46,14 +46,14 @@ Now we can look at the remaining possibilities:
     zille
     93 candidates
 
-So only 93 words are left. So let's ask Prolog about the best guess:
+So only 93 words are left. Let's ask Prolog about the best guess:
 
-    | ?- bestguess(Word).
-    Word = [heilt,hielt,leiht,lieht,tilde]
+    | ?- bestguess(Words).
+    Words = [heilt,hielt,leiht,lieht,tilde]
 
 The program suggests to try one of these words next. It uses a heuristic to prefer words with common letters and also words without duplicate letters.
 
-Let's go for *tilde*. Now we might get the feedback, that `t` and `d` are gray, `i` and `e` are still only yellow but `l` is green. So we enter the new data into the knowledge base:
+Let's go for *tilde*. Now we might get the feedback, that *t* and *d* are gray, *i* and *e* are still only yellow but *l* is green. So we enter the new data into the knowledge base:
 
     | ?- gray(t).
     | ?- green(l, 3).
