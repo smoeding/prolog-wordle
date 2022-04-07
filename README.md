@@ -10,11 +10,11 @@ Start by consulting the code:
     compiling /Users/stm/prolog-wordle/wordle.pro for byte code...
     /Users/stm/prolog-wordle/wordle.pro compiled, 235 lines read - 15126 bytes written, 7 ms
 
-The initialize a new game by calling the `play` goal:
+Initialize a new game by calling the `play` goal:
 
     | ?- play.
 
-You can query the possible solutions by calling the `words` goal:
+You can list the possible solutions by calling the `words` goal:
 
     | ?- words.
     ...
@@ -25,11 +25,11 @@ You can query the possible solutions by calling the `words` goal:
     zyste
     4411 candidates
 
-There are more than 4000 possible solutions when the game starts and no additional facts are added to the knowledge base.
+With the provided word list there are more than 4000 possible solutions when the game starts and no additional facts are added to the knowledge base.
 
 Let's start and try the word *insel*. Maybe this guess tells us the letters *i*, *e* and *l* are yellow and the letters *n* and *s* are gray. So we enter this data into the knowledge base:
 
-    | ?- yellow(i, 1), yellow(e, 4), yellow(l, 5), gray(n), gray(s).
+    | ?- yellow(i, 1), gray(n), gray(s), yellow(e, 4), yellow(l, 5).
 
 Now we can look at the remaining possibilities:
 
@@ -42,27 +42,28 @@ Now we can look at the remaining possibilities:
     zille
     93 candidates
 
-So only 93 words are left. Let's ask Prolog about the best guess:
+Now only 93 words are left. Let's ask Prolog about the best guess:
 
     | ?- bestguess(Words).
     Words = [heilt,hielt,leiht,lieht,tilde]
 
-The program suggests to try one of these words next. It uses a heuristic to prefer words with common letters and also words without duplicate letters.
+The program suggests to try one of these words next. It uses the following heuristic:
+* prefer words with common letters over words with rarely used letters
+* prefer words with distinct letters over words with duplicate letters
 
 Let's go for *tilde*. Now we might get the feedback, that *t* and *d* are gray, *i* and *e* are still only yellow but *l* is green. So we enter the new data into the knowledge base:
 
-    | ?- gray(t), green(l, 3), gray(d), yellow(e, 5).
+    | ?- gray(t), yellow(i, 2), green(l, 3), gray(d), yellow(e, 5).
 
 Then we check the remaining solution candidates:
 
     | ?- words.
     celli
-    eilig
     eklig
     oelig
-    4 candidates
+    3 candidates
 
-As you can see we are down to only 4 remaining words.
+As you can see we are down to only 3 remaining words after two guesses.
 
 ## Other languages
 
