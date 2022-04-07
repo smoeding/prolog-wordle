@@ -2,7 +2,7 @@
 %
 % Author:  Stefan Möding <stm@kill-9.net>
 % Created: <2022-03-29 18:37:22 stm>
-% Updated: <2022-04-07 15:11:02 stm>
+% Updated: <2022-04-07 15:23:09 stm>
 %
 
 dynamic(wordle).
@@ -44,7 +44,10 @@ weight(z, 121).
 % getweight(?list, ?integer)
 %
 % getweight(List, Weight) succeeds if the total weights for all letters in
-% List is Weight.
+% List is Weight. If a letter is used more than once in a word, only one
+% occurrence is used to calculate the weight. This is used to prefer words
+% with different letters over words where some letters are used more than
+% once.
 %
 getweight([], 0).
 getweight([H|T], Weight) :-
