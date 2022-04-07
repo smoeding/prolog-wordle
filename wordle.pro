@@ -2,7 +2,7 @@
 %
 % Author:  Stefan Möding <stm@kill-9.net>
 % Created: <2022-03-29 18:37:22 stm>
-% Updated: <2022-04-06 17:54:50 stm>
+% Updated: <2022-04-07 15:11:02 stm>
 %
 
 dynamic(wordle).
@@ -138,7 +138,10 @@ words(Words) :-
 %
 gray(Char) :-
     findall(X, wordle(X, _), Words),
-    gray(Char, Words).
+    gray(Char, Words),
+    !.
+
+gray(_, []).
 
 gray(Char, [H|T]) :-
     gray1(Char, H),
@@ -161,7 +164,10 @@ gray1(Char, Word) :-
 %
 green(Char, Pos) :-
     findall(X, wordle(X, _), Words),
-    green(Char, Pos, Words).
+    green(Char, Pos, Words),
+    !.
+
+green(_, _, []).
 
 green(Char, Pos, [H|T]) :-
     green1(Char, Pos, H),
@@ -186,7 +192,10 @@ green1(Char, Pos, Word) :-
 %
 yellow(Char, Pos) :-
     findall(X, wordle(X, _), Words),
-    yellow(Char, Pos, Words).
+    yellow(Char, Pos, Words),
+    !.
+
+yellow(_, _, []).
 
 yellow(Char, Pos, [H|T]) :-
     yellow1(Char, Pos, H),

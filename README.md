@@ -29,11 +29,7 @@ There are more than 4000 possible solutions when the game starts and no addition
 
 Let's start and try the word *insel*. Maybe this guess tells us the letters *i*, *e* and *l* are yellow and the letters *n* and *s* are gray. So we enter this data into the knowledge base:
 
-    | ?- yellow(i, 1).
-    | ?- yellow(e, 4).
-    | ?- yellow(l, 5).
-    | ?- gray(n).
-    | ?- gray(s).
+    | ?- yellow(i, 1), yellow(e, 4), yellow(l, 5), gray(n), gray(s).
 
 Now we can look at the remaining possibilities:
 
@@ -55,10 +51,7 @@ The program suggests to try one of these words next. It uses a heuristic to pref
 
 Let's go for *tilde*. Now we might get the feedback, that *t* and *d* are gray, *i* and *e* are still only yellow but *l* is green. So we enter the new data into the knowledge base:
 
-    | ?- gray(t).
-    | ?- green(l, 3).
-    | ?- gray(d).
-    | ?- yellow(e, 5).
+    | ?- gray(t), green(l, 3), gray(d), yellow(e, 5).
 
 Then we check the remaining solution candidates:
 
