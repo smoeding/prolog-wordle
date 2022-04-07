@@ -2,7 +2,7 @@
 %
 % Author:  Stefan Möding <stm@kill-9.net>
 % Created: <2022-03-29 18:37:22 stm>
-% Updated: <2022-04-07 15:23:09 stm>
+% Updated: <2022-04-07 19:41:55 stm>
 %
 
 dynamic(wordle).
@@ -83,27 +83,55 @@ read_1line_to_codes(C, Stream, [C|T]) :-
     read_1line_to_codes(C2, Stream, T).
 
 
+% read_words(+stream, ?list)
+%
+% read_words(Stream, List) succeeds if List is a list of words read from
+% Stream.
+%
+read_words(Stream, []) :-
+    at_end_of_stream(Stream).
+
+read_words(Stream, [H|T]) :-
+    \+ at_end_of_stream(Stream),
+    read_line_to_codes(Stream, Line),
+    atom_codes(H, Line),
+    read_words(Stream, T),
+    !.
+
+
+% learn_words(+list)
+%
+% learn_words(List) iterates over List and adds wordle(Word, Weight) facts to
+% the knowledge base as a side effect. Word is an atom of the word and Weight
+% the total sum of the weight of the characters that are contained in Word.
+%
+learn_words([]).
+
+learn_words([H|T]) :-
+    atom_chars(H, Letters),
+    getweight(Letters, Weight),
+    assertz(wordle(H, Weight)),
+    learn_words(T).
+
+
 % play
 %
 % play initializes the wordle(Word, Weight) fact for all words read from the
-% file "wordle.txt". Word is an atom of the word and Weight the total sum of
-% the weight of the characters that are contained in Word.
+% file "wordle.txt".
 %
 % play must be called to play a new game.
 %
 play :-
     randomize,
+    % Forget all known words and start a new game
     retractall(wordle(_, _)),
+    % Read words from file
     open('wordle.txt', read, Str),
-    repeat,
-    read_line_to_codes(Str, Line),
-    atom_codes(Word, Line),
-    atom_chars(Word, List),
-    getweight(List, Weight),
-    assertz(wordle(Word, Weight)),
-    at_end_of_stream(Str),
+    read_words(Str, Words),
     close(Str),
-    !.
+    % Store words in knowledge base
+    learn_words(Words).
+
 
 % write_words(+list)
 %
