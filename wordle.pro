@@ -2,43 +2,60 @@
 %
 % Author:  Stefan Möding <stm@kill-9.net>
 % Created: <2022-03-29 18:37:22 stm>
-% Updated: <2022-04-07 19:41:55 stm>
+% Updated: <2022-04-08 19:33:34 stm>
 %
 
+% wordle(?atom, ?integer)
+%
+% wordle(Word, Weight) succeeds if the letters used in Word have a total
+% weight of Weight.
+%
 dynamic(wordle).
 
 
 % weight(?atom, ?integer)
 %
-% weight(Letter, Weight) succeeds if Letter has Weight as determined by the
-% letter frequency for German words.
+% weight(Char, Weight) succeeds if Char has Weight as determined by the
+% letter frequency for the processed words.
 %
-weight(a, 558).
-weight(b, 196).
-weight(c, 316).
-weight(d, 498).
-weight(e, 1693).
-weight(f, 149).
-weight(g, 302).
-weight(h, 498).
-weight(i, 802).
-weight(j, 24).
-weight(k, 132).
-weight(l, 360).
-weight(m, 255).
-weight(n, 1053).
-weight(o, 224).
-weight(p, 67).
-weight(q, 2).
-weight(r, 689).
-weight(s, 642).
-weight(t, 579).
-weight(u, 383).
-weight(v, 84).
-weight(w, 178).
-weight(x, 5).
-weight(y, 5).
-weight(z, 121).
+dynamic(weight).
+
+
+% incweight(+list)
+%
+% incweight(List) iterates over a list of single char atoms. For each char it
+% checks if weight(Char, Weight) can be proved. If the clause weight(Char,
+% Weight) exists, then the fact is retracted and a new fact with Weight+1 is
+% asserted. Otherwise weight(Char, 1) is asserted.
+%
+incweight([]).
+
+incweight([H|T]) :-
+    clause(weight(H, Old), _),
+    New is Old + 1,
+    retract(weight(H, Old)),
+    asserta(weight(H, New)),
+    !,
+    incweight(T).
+
+incweight([H|T]) :-
+    \+ clause(weight(H, _), _),
+    asserta(weight(H, 1)),
+    !,
+    incweight(T).
+
+
+% learn_letters(+list)
+%
+% learn_letters(List) iterates over a list of words. Each word is decomposed
+% into a list of chars and the weight for these chars is incremented.
+%
+learn_letters([]).
+learn_letters([H|T]) :-
+    atom_chars(H, Chars),
+    incweight(Chars),
+    !,
+    learn_letters(T).
 
 
 % getweight(?list, ?integer)
@@ -108,8 +125,8 @@ read_words(Stream, [H|T]) :-
 learn_words([]).
 
 learn_words([H|T]) :-
-    atom_chars(H, Letters),
-    getweight(Letters, Weight),
+    atom_chars(H, Chars),
+    getweight(Chars, Weight),
     assertz(wordle(H, Weight)),
     learn_words(T).
 
@@ -123,12 +140,15 @@ learn_words([H|T]) :-
 %
 play :-
     randomize,
-    % Forget all known words and start a new game
+    % Forget all words and weights
     retractall(wordle(_, _)),
+    retractall(weight(_, _)),
     % Read words from file
     open('wordle.txt', read, Str),
     read_words(Str, Words),
     close(Str),
+    % Store weights for used letters in knowledge base
+    learn_letters(Words),
     % Store words in knowledge base
     learn_words(Words).
 
