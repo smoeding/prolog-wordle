@@ -1,6 +1,6 @@
 # Play Wordle using GNU Prolog
 
-This is an implementation of the [Wordle](https://en.m.wikipedia.org/wiki/Wordle) game written in [GNU Prolog](http://www.gprolog.org).  The program tries to guess German words and expects updates to the knowledge base about the answers. So it can help you to play a Wordle game (try https://wordle.at for German words).
+This is an implementation of the [Wordle](https://en.m.wikipedia.org/wiki/Wordle) game written in [GNU Prolog](http://www.gprolog.org).  The program tries to guess English or German words and expects updates to the knowledge base about the answers. So it can help you to play a Wordle game (try https://wordle.at for German words).
 
 ## How to play
 
@@ -10,9 +10,9 @@ Start by consulting the code:
     compiling /Users/stm/prolog-wordle/wordle.pro for byte code...
     /Users/stm/prolog-wordle/wordle.pro compiled, 235 lines read - 15126 bytes written, 7 ms
 
-Initialize a new game by calling the `play` goal:
+Initialize a new game by calling the `play` goal with the language to use as parameter (english and german are supported):
 
-    | ?- play.
+    | ?- play(german).
 
 You can list the possible solutions by calling the `words` goal:
 
@@ -64,7 +64,3 @@ Then we check the remaining solution candidates:
     3 candidates
 
 As you can see we are down to only 3 remaining words after two guesses.
-
-## Other languages
-
-The file `wordle.txt` contains German words that are loaded when you start to play a new game. You can try to replace the file with a list of words from a different language. The heuristic for the best guess uses the distribution of letters in German words. The given distribution might work for some languages better than for others.

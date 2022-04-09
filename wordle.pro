@@ -1,8 +1,8 @@
-% wordle.pro --- Play wordle with german words
+% wordle.pro --- Play wordle with german or english words
 %
 % Author:  Stefan Möding <stm@kill-9.net>
 % Created: <2022-03-29 18:37:22 stm>
-% Updated: <2022-04-08 19:33:34 stm>
+% Updated: <2022-04-08 19:36:41 stm>
 %
 
 % wordle(?atom, ?integer)
@@ -131,26 +131,29 @@ learn_words([H|T]) :-
     learn_words(T).
 
 
-% play
+% play(+atom)
 %
-% play initializes the wordle(Word, Weight) fact for all words read from the
-% file "wordle.txt".
+% play(Language) initializes the wordle(Word, Weight) fact for all words read
+% from the file Language.
 %
 % play must be called to play a new game.
 %
-play :-
+play(Language) :-
     randomize,
     % Forget all words and weights
     retractall(wordle(_, _)),
     retractall(weight(_, _)),
     % Read words from file
-    open('wordle.txt', read, Str),
+    open(Language, read, Str),
     read_words(Str, Words),
     close(Str),
     % Store weights for used letters in knowledge base
     learn_letters(Words),
     % Store words in knowledge base
     learn_words(Words).
+
+german :- play(german).
+english :- play(english).
 
 
 % write_words(+list)
