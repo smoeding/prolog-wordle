@@ -10,7 +10,7 @@ Start by consulting the code:
     compiling /Users/stm/prolog-wordle/wordle.pro for byte code...
     /Users/stm/prolog-wordle/wordle.pro compiled, 235 lines read - 15126 bytes written, 7 ms
 
-Initialize a new game by calling the `play` goal with the language to use as parameter (english and german are supported):
+Initialize a new game by calling the `play` goal with the language to use as parameter. Currently only the values `english` and `german` are supported.
 
     | ?- play(german).
 
@@ -25,7 +25,7 @@ You can list the possible solutions by calling the `words` goal:
     zyste
     4411 candidates
 
-With the provided word list there are more than 4000 possible solutions when the game starts and no additional facts are added to the knowledge base.
+With the provided list of German words there are more than 4000 possible solutions when the game starts and no additional facts are added to the knowledge base.
 
 Let's start and try the word *insel*. Maybe this guess tells us the letters *i*, *e* and *l* are yellow and the letters *n* and *s* are gray. So we enter this data into the knowledge base:
 
@@ -64,3 +64,43 @@ Then we check the remaining solution candidates:
     3 candidates
 
 As you can see we are down to only 3 remaining words after two guesses.
+
+## Implemented goals
+
+In the following descriptions `Position` and `Number` must be an integer between `1` and `5` and `Letter` must be a single character atom.
+
+### play(+atom)
+
+`play(Language)` starts a new game. All known words for the given `Language` are loaded from a file and established as facts. Currently `Language` must be the atom `english` or `german` to load the list of words.
+
+The goals `english` or `german` can be used as a shortcut.
+
+### green(+atom, +integer)
+
+`green(Letter, Position)` marks `Letter` as correct on `Position`.
+
+The clause removes all words that have a different letter on the given position from the knowledge base. So effectively only words that have the letter at this position are kept in the knowledge base for subsequent searches.
+
+### yellow(+atom, +integer)
+
+`yellow(Letter, Position)` marks `Letter` as used in the solution but not on `Position`.
+
+The clause removes all words from the knowledge base that either do not include `Letter` at all or have `Letter` on `Position`.
+
+### gray(+atom, +integer)
+
+`gray(Letter, Number)` marks `Letter` as not used in the solution if the letter occurs `Number` or more times.
+
+The goal removes all words from the knowledge base where `Letter` occurs `Number` or more times.
+
+The parameter `Number` should be instantiated with `1` for a letter that is only tested once and receives the gray mark.
+
+`Number` should be instantiated with `2` or a higher number to remove all words where the letter occurs more than the given number. This is needed if you try a word where a specific letter is used multiple times and the result shows different colors for the letter (e.g. once yellow and once gray).
+
+### words
+
+`words` prints a list of remaining words to the terminal.
+
+### bestguess(-list)
+
+`bestguess(Words)` instantiates `Words` with a list of words that remain as solution candidates. It uses a heuristic that prefers words with common letters.

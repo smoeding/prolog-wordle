@@ -2,7 +2,7 @@
 %
 % Author:  Stefan Möding <stm@kill-9.net>
 % Created: <2022-03-29 18:37:22 stm>
-% Updated: <2022-04-08 19:36:41 stm>
+% Updated: <2022-04-09 13:44:43 stm>
 %
 
 % wordle(?atom, ?integer)
@@ -185,30 +185,58 @@ words(Words) :-
     findall(X, wordle(X, _), Words).
 
 
+% count(+atom, +list, ?integer)
+%
+% count(Element, List, Num) succeeds if Element occurs exactly Num times in
+% List.
+%
+count(Element, List, 0) :-
+    \+ memberchk(Element, List),
+    !.
+
+count(Element, List, Number) :-
+    memberchk(Element, List),
+    select(Element, List, List2),
+    count(Element, List2, Remaining),
+    Number is Remaining + 1,
+    !.
+
 % gray(+atom)
 %
 % gray(Char) retracts all wordle(Word, _) facts that do not have Char as
 % a character in Word.
 %
-gray(Char) :-
+gray(Char) :- gray(Char, 1).
+
+
+% gray(+atom, +integer)
+%
+% gray(Char, Count) retracts all wordle(Word, _) facts that do have Count or
+% more occurences of Char. This is used if you have the same character marked
+% as green/yellow and as gray. In this case you use gray(Char, 2) to indicate
+% that the character is not used two or more times.
+%
+gray(Char, Count) :-
     findall(X, wordle(X, _), Words),
-    gray(Char, Words),
+    gray(Char, Count, Words),
     !.
 
-gray(_, []).
+gray(_, _, []).
 
-gray(Char, [H|T]) :-
-    gray1(Char, H),
-    gray(Char, T).
+gray(Char, Count, [H|T]) :-
+    gray1(Char, Count, H),
+    gray(Char, Count, T).
 
-gray1(Char, Word) :-
+gray1(Char, Count, Word) :-
     atom_chars(Word, List),
-    memberchk(Char, List),
+    count(Char, List, Num),
+    Num >= Count,
     retract(wordle(Word, _)).
 
-gray1(Char, Word) :-
+gray1(Char, Count, Word) :-
     atom_chars(Word, List),
-    \+ memberchk(Char, List).
+    count(Char, List, Num),
+    Num < Count.
 
 
 % green(+atom, +integer)
@@ -278,7 +306,7 @@ yellow1(Char, Pos, Word) :-
 % bestguess(-list)
 %
 % bestguess(Words) instantiates Words with a list of Word for which
-% wordle(Word, Weight) can be proved and Weight is the maximal weight.
+% wordle(Word, Weight) can be proved and Weight is the maximum weight.
 %
 bestguess(Words) :-
     findall(W, wordle(_, W), Weights),
