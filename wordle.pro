@@ -333,6 +333,7 @@ bestguess1(Word) :-
 %
 guess(Word) :-
     findall(X, wordle(X, _), Words),
-    length(Words, Len),
-    random(1, Len, Pos),
-    nth(Pos, Words, Word).
+    length(Words, Count),
+    random(0, Count, Pos),
+    Pos1 is Pos + 1,
+    nth(Pos1, Words, Word).
