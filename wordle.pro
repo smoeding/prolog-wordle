@@ -2,7 +2,7 @@
 %
 % Author:  Stefan Möding <stm@kill-9.net>
 % Created: <2022-03-29 18:37:22 stm>
-% Updated: <2023-03-01 17:09:37 stm>
+% Updated: <2023-03-01 17:37:03 stm>
 %
 
 % wordle(?atom, ?integer)
@@ -10,7 +10,7 @@
 % wordle(Word, Weight) succeeds if the letters used in Word have a total
 % weight of Weight.
 %
-dynamic(wordle).
+:- dynamic(wordle/2).
 
 
 % weight(?atom, ?integer)
@@ -18,7 +18,7 @@ dynamic(wordle).
 % weight(Char, Weight) succeeds if Char has Weight as determined by the
 % letter frequency for the processed words.
 %
-dynamic(weight).
+:- dynamic(weight/2).
 
 
 % incweight(+list)

@@ -104,3 +104,13 @@ The parameter `Number` should be instantiated with `1` for a letter that is only
 ### bestguess(-list)
 
 `bestguess(Words)` instantiates `Words` with a list of words that remain as solution candidates. It uses a heuristic that prefers words with common letters.
+
+### bestguess1(-atom)
+
+`bestguess1(Word)` instantiates `Word` with a single random word that remain as solution candidates. It uses `bestguess(Words)` to produce a list of words and selects a random word from that list.
+
+# Compilation
+
+You can compile the program into a native executable using the GNU Prolog compiler:
+
+    gplc wordle.pro
