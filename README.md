@@ -10,7 +10,7 @@ Start by consulting the code:
     compiling /Users/stm/prolog-wordle/wordle.pro for byte code...
     /Users/stm/prolog-wordle/wordle.pro compiled, 235 lines read - 15126 bytes written, 7 ms
 
-Initialize a new game by calling the `play` goal with the language to use as parameter. Currently only the values `english` and `german` are supported.
+Initialize a new game by calling the `play` goal with the language to use as parameter. This will load the known words from a file. Currently only the values `english` and `german` are supported.
 
     | ?- play(german).
 
@@ -109,7 +109,7 @@ The parameter `Number` should be instantiated with `1` for a letter that is only
 
 `bestguess1(Word)` instantiates `Word` with a single random word that remain as solution candidates. It uses `bestguess(Words)` to produce a list of words and selects a random word from that list.
 
-# Compilation
+## Compilation
 
 You can compile the program into a native executable using the GNU Prolog compiler:
 
