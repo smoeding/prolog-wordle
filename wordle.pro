@@ -2,7 +2,7 @@
 %
 % Author:  Stefan Möding <stm@kill-9.net>
 % Created: <2022-03-29 18:37:22 stm>
-% Updated: <2023-03-01 17:37:03 stm>
+% Updated: <2023-03-03 21:31:48 stm>
 %
 
 % wordle(?atom, ?integer)
@@ -316,7 +316,7 @@ bestguess(Words) :-
 
 % bestguess1(-atom)
 %
-% bestguess(Word) instantiates Word with a random word in list Words for
+% bestguess1(Word) instantiates Word with a random word in list Words for
 % which bestguess(Words) can be proved.
 %
 bestguess1(Word) :-
@@ -325,6 +325,7 @@ bestguess1(Word) :-
     random(0, Count, Pos),
     Pos1 is Pos + 1,
     nth(Pos1, Words, Word).
+
 
 % guess(-atom)
 %
