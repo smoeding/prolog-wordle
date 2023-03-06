@@ -2,7 +2,7 @@
 %
 % Author:  Stefan Möding <stm@kill-9.net>
 % Created: <2022-03-29 18:37:22 stm>
-% Updated: <2023-03-03 21:31:48 stm>
+% Updated: <2023-03-05 12:10:36 stm>
 %
 
 % wordle(?atom, ?integer)
@@ -156,6 +156,15 @@ german :- play(german).
 english :- play(english).
 
 
+% write_candidates(-atom)
+%
+% write_candidates(Count) writes that Count candidates are remaining as side
+% effect.
+%
+write_candidates(1) :- write('1 candidate remains.'), nl, !.
+write_candidates(Count) :- write(Count), write(' candidates remain.'), nl, !.
+
+
 % write_words(+list)
 %
 % write_words(List) writes all elements of List as a side effect.
@@ -177,9 +186,7 @@ words :-
     findall(X, wordle(X, _), Words),
     write_words(Words),
     length(Words, Count),
-    write(Count),
-    write(' candidates'),
-    nl.
+    write_candidates(Count).
 
 words(Words) :-
     findall(X, wordle(X, _), Words).
