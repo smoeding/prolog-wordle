@@ -1,6 +1,6 @@
 # Play Wordle using GNU Prolog
 
-This is an implementation of the [Wordle](https://en.m.wikipedia.org/wiki/Wordle) game written in [GNU Prolog](http://www.gprolog.org).  The program tries to guess English or German words and expects updates to the knowledge base about the answers. So it can help you to play a Wordle game (try https://wordle.at for German words).
+This is an implementation of the [Wordle](https://en.m.wikipedia.org/wiki/Wordle) game written in [GNU Prolog](http://www.gprolog.org).  The program tries to guess English or German words and expects updates to the knowledge base about the answers. So it can help you to play a Wordle game (try https://gridgames.app/gridwords/ for Austrian/German words).
 
 ## How to play
 
@@ -23,7 +23,7 @@ You can list the possible solutions by calling the `words` goal:
     zwirn
     zwist
     zyste
-    4411 candidates
+    4411 candidates remain.
 
 With the provided list of German words there are more than 4000 possible solutions when the game starts and no additional facts are added to the knowledge base.
 
@@ -61,9 +61,14 @@ Then we check the remaining solution candidates:
     celli
     eklig
     oelig
-    3 candidates
+    3 candidates remain.
 
 As you can see we are down to only 3 remaining words after two guesses.
+
+You can also use the goal `bestguess1(Word)` to ask for a single (random) word out of the remaining candidates:
+
+    | ?- bestguess1(Word).
+    Word = oelig
 
 ## Implemented goals
 
